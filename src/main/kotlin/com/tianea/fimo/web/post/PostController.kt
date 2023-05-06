@@ -2,11 +2,9 @@ package com.tianea.fimo.web.post
 
 import com.tianea.fimo.domain.post.dto.PostCreateDTO
 import com.tianea.fimo.domain.post.dto.PostReadDTO
+import com.tianea.fimo.domain.post.dto.PostUpdateDTO
 import com.tianea.fimo.domain.post.service.PostService
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
 
@@ -15,14 +13,18 @@ import java.security.Principal
 class PostController(
     private val postService: PostService
 
-){
-
+) {
     @PostMapping("/create")
     fun createPost(
         principal: Principal,
         @RequestBody create: PostCreateDTO
-    ): PostReadDTO {
-        return postService.createPost(principal.name, create)
-    }
+    ): PostReadDTO = postService.createPost(principal.name, create)
 
+    @PutMapping("/update/{postId}")
+    fun updatePost(
+        @PathVariable("postId")
+        postId: String,
+        principal: Principal,
+        @RequestBody update: PostUpdateDTO
+    ): PostReadDTO = postService.updatePost(principal.name, postId, update)
 }

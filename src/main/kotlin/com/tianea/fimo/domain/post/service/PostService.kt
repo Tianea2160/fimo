@@ -2,6 +2,9 @@ package com.tianea.fimo.domain.post.service
 
 import com.tianea.fimo.domain.post.dto.PostCreateDTO
 import com.tianea.fimo.domain.post.dto.PostReadDTO
+import com.tianea.fimo.domain.post.dto.PostUpdateDTO
+import com.tianea.fimo.domain.post.error.PostAuthorizationException
+import com.tianea.fimo.domain.post.error.PostNotFoundException
 import com.tianea.fimo.domain.post.repository.PostClickRepository
 import com.tianea.fimo.domain.post.repository.PostItemRepository
 import com.tianea.fimo.domain.post.repository.PostRepository
@@ -29,6 +32,18 @@ class PostService(
         postItemRepository.saveAll(items)
         val isClicked = postClickRepository.existsByPostIdAndUserId(postId = post.id, userId = loginId)
         return PostReadDTO.from(user, post, items, isClicked)
+    }
+
+    @Transactional
+    fun updatePost(loginId: String, postId: String, update: PostUpdateDTO): PostReadDTO {
+        val user = userRepository.findByIdOrNull(loginId) ?: throw UserNotFoundException()
+        val post = postRepository.findByIdOrNull(postId) ?: throw PostNotFoundException()
+        if (user.id != post.userId) throw PostAuthorizationException()
+        postItemRepository.deleteAllByPostId(post.id)
+        val item = update.createPostItems(postId = post.id, provider = provider)
+        postItemRepository.saveAll(item)
+        val isClicked = postClickRepository.existsByPostIdAndUserId(userId = loginId, postId = postId)
+        return PostReadDTO.from(user, post, item, isClicked)
     }
 }
 

@@ -11,7 +11,9 @@ interface PostRepository  : JpaRepository<Post, String>
 
 
 @Repository
-interface PostItemRepository  : JpaRepository<PostItem, String>
+interface PostItemRepository  : JpaRepository<PostItem, String>{
+    fun deleteAllByPostId(postId: String)
+}
 
 @Repository
 interface PostClickRepository  : JpaRepository<PostClick, String>{
