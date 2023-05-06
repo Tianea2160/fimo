@@ -29,6 +29,8 @@ class SecurityConfig(
             .authorizeHttpRequests()
             .requestMatchers("/login/**").permitAll()
             .requestMatchers("/test/user").hasRole("USER")
+            .requestMatchers("/api/v1/**").hasRole("USER")
+            .anyRequest().denyAll()
             .and()
             .csrf().disable()
             .formLogin().disable()
