@@ -1,6 +1,7 @@
 package com.tianea.fimo.config
 
 import com.tianea.fimo.shared.security.JwtAuthenticationFilter
+import com.tianea.fimo.shared.security.Oauth2AuthenticationFailureHandler
 import com.tianea.fimo.shared.security.Oauth2AuthenticationSuccessHandler
 import com.tianea.fimo.shared.security.PrincipalOauth2UserService
 import org.springframework.context.annotation.Bean
@@ -15,7 +16,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 class SecurityConfig(
     private val userService: PrincipalOauth2UserService,
-    private val authenticationSuccessHandler: Oauth2AuthenticationSuccessHandler,
+    private val successHandler: Oauth2AuthenticationSuccessHandler,
+    private val failureHandler: Oauth2AuthenticationFailureHandler,
     private val jwtAuthenticationFilter: JwtAuthenticationFilter
 ) {
     @Bean
@@ -32,8 +34,10 @@ class SecurityConfig(
             .formLogin().disable()
             .httpBasic().disable()
 
-        http.oauth2Login()
-            .successHandler(authenticationSuccessHandler)
+        http
+            .oauth2Login()
+            .successHandler(successHandler)
+            .failureHandler(failureHandler)
             .userInfoEndpoint()
             .userService(userService)
         return http.build()
