@@ -45,6 +45,15 @@ class PostService(
         val isClicked = postClickRepository.existsByPostIdAndUserId(userId = loginId, postId = postId)
         return PostReadDTO.from(user, post, item, isClicked)
     }
+
+    @Transactional
+    fun deletePost(loginId:String, postId:String){
+        val user = userRepository.findByIdOrNull(loginId) ?: throw UserNotFoundException()
+        val post = postRepository.findByIdOrNull(postId) ?: throw PostNotFoundException()
+        if (user.id != post.userId) throw PostAuthorizationException()
+        postItemRepository.deleteAllByPostId(post.id)
+        postRepository.deleteById(post.id)
+    }
 }
 
 @Service

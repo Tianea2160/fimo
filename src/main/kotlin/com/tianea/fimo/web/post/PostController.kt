@@ -27,4 +27,17 @@ class PostController(
         principal: Principal,
         @RequestBody update: PostUpdateDTO
     ): PostReadDTO = postService.updatePost(principal.name, postId, update)
+
+    @DeleteMapping("/delete/{postId}")
+    fun deletePost(@PathVariable("postId") postId: String, principal: Principal) : CommonResponse{
+        postService.deletePost(principal.name, postId)
+        return CommonResponse("delete post success", "success", 200)
+    }
 }
+
+
+class CommonResponse(
+    val code : String,
+    val message : String,
+    val status : Int,
+)
