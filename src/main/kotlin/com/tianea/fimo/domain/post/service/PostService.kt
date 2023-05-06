@@ -47,12 +47,31 @@ class PostService(
     }
 
     @Transactional
-    fun deletePost(loginId:String, postId:String){
+    fun deletePost(loginId: String, postId: String) {
         val user = userRepository.findByIdOrNull(loginId) ?: throw UserNotFoundException()
         val post = postRepository.findByIdOrNull(postId) ?: throw PostNotFoundException()
         if (user.id != post.userId) throw PostAuthorizationException()
         postItemRepository.deleteAllByPostId(post.id)
         postRepository.deleteById(post.id)
+    }
+
+    @Transactional(readOnly = true)
+    fun findAll(loginId: String): List<PostReadDTO> {
+        return postRepository.findAllSortedByCreatedAtDesc().map { post ->
+            val items = postItemRepository.findAllByPostId(post.id)
+            val user = userRepository.findByIdOrNull(post.userId) ?: throw UserNotFoundException()
+            val isClicked = postClickRepository.existsByPostIdAndUserId(userId = loginId, postId = post.id)
+            PostReadDTO.from(user, post, items, isClicked)
+        }
+    }
+
+    @Transactional(readOnly = true)
+    fun findById(loginId : String, postId :String): PostReadDTO {
+        val post = postRepository.findByIdOrNull(postId) ?: throw PostNotFoundException()
+        val user = userRepository.findByIdOrNull(post.userId) ?: throw UserNotFoundException()
+        val items = postItemRepository.findAllByPostId(post.id)
+        val isClicked = postClickRepository.existsByPostIdAndUserId(userId = loginId, postId = post.id)
+        return PostReadDTO.from(user, post, items, isClicked)
     }
 }
 

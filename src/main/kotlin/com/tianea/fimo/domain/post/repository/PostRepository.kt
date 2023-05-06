@@ -4,18 +4,23 @@ import com.tianea.fimo.domain.post.entity.Post
 import com.tianea.fimo.domain.post.entity.PostClick
 import com.tianea.fimo.domain.post.entity.PostItem
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface PostRepository  : JpaRepository<Post, String>
+interface PostRepository : JpaRepository<Post, String>{
+    @Query("SELECT p FROM Post p ORDER BY p.createdAt DESC")
+    fun findAllSortedByCreatedAtDesc(): List<Post>
+}
 
 
 @Repository
-interface PostItemRepository  : JpaRepository<PostItem, String>{
+interface PostItemRepository : JpaRepository<PostItem, String> {
     fun deleteAllByPostId(postId: String)
+    fun findAllByPostId(postId: String): List<PostItem>
 }
 
 @Repository
-interface PostClickRepository  : JpaRepository<PostClick, String>{
-    fun existsByPostIdAndUserId(postId :String, userId :String) : Boolean
+interface PostClickRepository : JpaRepository<PostClick, String> {
+    fun existsByPostIdAndUserId(postId: String, userId: String): Boolean
 }

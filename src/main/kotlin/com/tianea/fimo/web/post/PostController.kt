@@ -29,15 +29,22 @@ class PostController(
     ): PostReadDTO = postService.updatePost(principal.name, postId, update)
 
     @DeleteMapping("/delete/{postId}")
-    fun deletePost(@PathVariable("postId") postId: String, principal: Principal) : CommonResponse{
+    fun deletePost(@PathVariable("postId") postId: String, principal: Principal): CommonResponse {
         postService.deletePost(principal.name, postId)
         return CommonResponse("delete post success", "success", 200)
     }
+
+    @GetMapping("")
+    fun findAll(principal: Principal): List<PostReadDTO> = postService.findAll(principal.name)
+    @GetMapping("/details/{postId}")
+    fun findById(@PathVariable("postId") postId: String, principal: Principal): PostReadDTO =
+        postService.findById(loginId = principal.name, postId = postId)
+
 }
 
 
 class CommonResponse(
-    val code : String,
-    val message : String,
-    val status : Int,
+    val code: String,
+    val message: String,
+    val status: Int,
 )
