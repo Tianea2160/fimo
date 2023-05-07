@@ -65,6 +65,10 @@ class AuthService(
         )
         userService.createUser(create)
     }
+
+    fun signOut(loginId: String) {
+        userService.signOut(loginId)
+    }
 }
 
 class ReissueSuccessDTO(

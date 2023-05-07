@@ -6,10 +6,8 @@ import com.tianea.fimo.domain.auth.service.LoginSuccessDTO
 import com.tianea.fimo.domain.auth.service.ReissueSuccessDTO
 import com.tianea.fimo.domain.auth.service.SignUpDTO
 import com.tianea.fimo.shared.dto.CommonResponse
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import com.tianea.fimo.web.auth.dto.ReissueRequest
+import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
 @RestController
@@ -40,12 +38,14 @@ class AuthController(
         )
     }
 
+    @DeleteMapping("/signout")
+    fun signOut(principal: Principal): CommonResponse {
+        authService.signOut(principal.name)
+        return CommonResponse("sign out success", "sign.out.success", 200)
+    }
+
     @PostMapping("/reissue")
     fun reissue(@RequestBody reissue: ReissueRequest): ReissueSuccessDTO =
         authService.reissue(reissue.accessToken, reissue.refreshToken)
 }
 
-class ReissueRequest(
-    val accessToken: String,
-    val refreshToken: String
-)
