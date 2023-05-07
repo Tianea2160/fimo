@@ -38,10 +38,10 @@ class AuthController(
         )
     }
 
-    @DeleteMapping("/signout")
+    @DeleteMapping("/withdrawal")
     fun signOut(principal: Principal): CommonResponse {
-        authService.signOut(principal.name)
-        return CommonResponse("sign out success", "sign.out.success", 200)
+        authService.withdrawal(principal.name)
+        return CommonResponse("withdrawal success", "withdrawal.success", 200)
     }
 
     @PostMapping("/reissue")

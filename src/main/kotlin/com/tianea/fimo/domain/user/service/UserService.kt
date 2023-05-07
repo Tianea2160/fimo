@@ -59,7 +59,7 @@ class UserService(
     }
 
     @Transactional
-    fun signOut(loginId: String) {
+    fun withdrawal(loginId: String) {
         // 사용자 정보 삭제
         userRepository.deleteById(loginId)
         // 사용자 게시글 삭제
