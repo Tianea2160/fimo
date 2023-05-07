@@ -8,10 +8,12 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface PostRepository : JpaRepository<Post, String>{
+interface PostRepository : JpaRepository<Post, String> {
     @Query("SELECT p FROM Post p ORDER BY p.createdAt DESC")
     fun findAllSortedByCreatedAtDesc(): List<Post>
     fun countByUserId(userId: String): Int
+    fun findAllByUserId(userId: String): List<Post>
+    fun findAllByUserIdInOrderByCreatedAtDesc(ids: List<String>): List<Post>
 }
 
 

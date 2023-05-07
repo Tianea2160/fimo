@@ -36,9 +36,14 @@ class PostController(
 
     @GetMapping("")
     fun findAll(principal: Principal): List<PostReadDTO> = postService.findAll(principal.name)
+
     @GetMapping("/details/{postId}")
     fun findById(@PathVariable("postId") postId: String, principal: Principal): PostReadDTO =
         postService.findById(loginId = principal.name, postId = postId)
+
+    @GetMapping("/user/{userId}")
+    fun findByUserId(@PathVariable("userId") userId: String, principal: Principal): List<PostReadDTO> =
+        postService.findAllByUserId(loginId = principal.name, userId = userId)
 
 }
 

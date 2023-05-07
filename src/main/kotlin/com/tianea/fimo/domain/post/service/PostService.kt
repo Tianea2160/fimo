@@ -66,12 +66,22 @@ class PostService(
     }
 
     @Transactional(readOnly = true)
-    fun findById(loginId : String, postId :String): PostReadDTO {
+    fun findById(loginId: String, postId: String): PostReadDTO {
         val post = postRepository.findByIdOrNull(postId) ?: throw PostNotFoundException()
         val user = userRepository.findByIdOrNull(post.userId) ?: throw UserNotFoundException()
         val items = postItemRepository.findAllByPostId(post.id)
         val isClicked = postClickRepository.existsByPostIdAndUserId(userId = loginId, postId = post.id)
         return PostReadDTO.from(user, post, items, isClicked)
     }
+
+
+    @Transactional(readOnly = true)
+    fun findAllByUserId(loginId: String, userId: String): List<PostReadDTO> =
+        postRepository.findAllByUserId(userId).map { post ->
+            val items = postItemRepository.findAllByPostId(post.id)
+            val user = userRepository.findByIdOrNull(post.userId) ?: throw UserNotFoundException()
+            val isClicked = postClickRepository.existsByPostIdAndUserId(userId = loginId, postId = post.id)
+            PostReadDTO.from(user, post, items, isClicked)
+        }
 }
 
