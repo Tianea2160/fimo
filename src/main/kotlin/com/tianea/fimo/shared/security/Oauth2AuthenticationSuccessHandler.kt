@@ -31,5 +31,5 @@ class Oauth2AuthenticationSuccessHandler(
 class LoginSuccessDTO(
     val accessToken: String,
     val refreshToken: String,
-    val isNew : Boolean
+    val isNew: Boolean
 )
