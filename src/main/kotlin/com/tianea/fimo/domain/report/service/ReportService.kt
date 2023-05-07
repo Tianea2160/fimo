@@ -16,4 +16,10 @@ class ReportService(
         val report = create.toEntity(provider.generateId(),loginId )
         reportRepository.save(report)
     }
+
+
+    @Transactional
+    fun deleteAll(loginId:String){
+        reportRepository.deleteAllByUserId(loginId)
+    }
 }

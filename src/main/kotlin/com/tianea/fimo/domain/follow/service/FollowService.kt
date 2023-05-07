@@ -68,4 +68,10 @@ class FollowService(
         else if (onlyMe && !onlyYou) FollowStatus.FOLLOWING
         else FollowStatus.NONE
     }
+
+    @Transactional
+    fun deleteAll(userId: String) {
+        followRepository.deleteAllByFollowerOrFollowee(userId, userId)
+    }
+
 }

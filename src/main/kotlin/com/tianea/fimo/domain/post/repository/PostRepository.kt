@@ -14,6 +14,7 @@ interface PostRepository : JpaRepository<Post, String> {
     fun countByUserId(userId: String): Int
     fun findAllByUserId(userId: String): List<Post>
     fun findAllByUserIdInOrderByCreatedAtDesc(ids: List<String>): List<Post>
+    fun deleteAllByUserId(userId :String)
 }
 
 
@@ -26,4 +27,6 @@ interface PostItemRepository : JpaRepository<PostItem, String> {
 @Repository
 interface PostClickRepository : JpaRepository<PostClick, String> {
     fun existsByPostIdAndUserId(postId: String, userId: String): Boolean
+    fun deleteAllByUserId(userId:String)
+    fun deleteAllByPostId(postId:String)
 }

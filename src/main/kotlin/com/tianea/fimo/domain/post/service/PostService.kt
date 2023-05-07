@@ -85,13 +85,27 @@ class PostService(
         }
 
     @Transactional
-    fun favoriteUp(loginId :String, postId: String) : Long{
+    fun favoriteUp(loginId: String, postId: String): Long {
         val post = postRepository.findByIdOrNull(postId) ?: throw PostNotFoundException()
-        if(!postClickRepository.existsByPostIdAndUserId(userId = loginId, postId = postId)) {
+        if (!postClickRepository.existsByPostIdAndUserId(userId = loginId, postId = postId)) {
             val click = post.createPostClick(userId = loginId)
             postClickRepository.save(click)
         }
-        return         post.favoriteUp()
+        return post.favoriteUp()
+    }
+
+    @Transactional(readOnly = true)
+    fun countPosts(userId: String): Int = postRepository.countByUserId(userId)
+
+    @Transactional
+    fun deleteAll(userId: String) {
+        val posts = postRepository.findAllByUserId(userId)
+        for (post in posts) {
+            postItemRepository.deleteAllByPostId(post.id)
+            postClickRepository.deleteAllByPostId(post.id)
+        }
+        postRepository.deleteAllByUserId(userId)
+        postClickRepository.deleteAllByUserId(userId)
     }
 }
 
