@@ -29,7 +29,6 @@ class JwtService(
 
     fun createAccessToken(username: String): String = generateToken(username, accessDuration)
     fun createRefreshToken(username: String): String = generateToken(username, refreshDuration)
-        .apply { saveRefreshToken(username, this) }
 
     fun validateToken(token: String): Boolean = try {
         Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)

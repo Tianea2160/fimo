@@ -14,10 +14,10 @@ class UserController(
     private val userService: UserService,
 ) {
     @GetMapping("/validate/nickname")
-    fun validateNickname(@RequestParam("nickname") nickname: String) = userService.validateNickname(nickname)
+    fun validateNickname(@RequestParam("nickname") nickname: String) = userService.isValidNickname(nickname)
 
     @GetMapping("/validate/archive")
-    fun validateArchiveName(@RequestParam("archive") archive: String) = userService.validateArchiveName(archive)
+    fun validateArchiveName(@RequestParam("archive") archive: String) = userService.isValidArchiveName(archive)
 
     @PostMapping("/profile/update")
     fun updateProfile(principal: Principal, @RequestBody update: ProfileUpdateDTO) =

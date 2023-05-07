@@ -6,8 +6,10 @@ import com.tianea.fimo.domain.report.service.ReportService
 import com.tianea.fimo.domain.user.dto.MyProfileReadDTO
 import com.tianea.fimo.domain.user.dto.ProfileReadDTO
 import com.tianea.fimo.domain.user.dto.ProfileUpdateDTO
+import com.tianea.fimo.domain.user.dto.UserCreateDTO
 import com.tianea.fimo.domain.user.error.UserNotFoundException
 import com.tianea.fimo.domain.user.repository.UserRepository
+import com.tianea.fimo.shared.provider.IdentifierProvider
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -18,12 +20,22 @@ class UserService(
     private val postService: PostService,
     private val followService: FollowService,
     private val reportService: ReportService,
+    private val provider: IdentifierProvider
 ) {
-    @Transactional(readOnly = true)
-    fun validateNickname(nickname: String) = !userRepository.existsByNickname(nickname)
+    @Transactional
+    fun createUser(create:UserCreateDTO){
+        val user = create.toEntity()
+        userRepository.save(user)
+    }
 
     @Transactional(readOnly = true)
-    fun validateArchiveName(archiveName: String) = !userRepository.existsByArchiveName(archiveName)
+    fun isValidNickname(nickname: String) = !userRepository.existsByNickname(nickname)
+
+    @Transactional(readOnly = true)
+    fun isValidArchiveName(archiveName: String) = !userRepository.existsByArchiveName(archiveName)
+
+    @Transactional(readOnly = true)
+    fun isValidUserId(userId: String) = !userRepository.existsById(userId)
 
     @Transactional
     fun updateProfile(loginId: String, update: ProfileUpdateDTO): MyProfileReadDTO {
