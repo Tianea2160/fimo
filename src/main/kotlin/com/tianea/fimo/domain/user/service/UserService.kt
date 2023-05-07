@@ -1,7 +1,8 @@
 package com.tianea.fimo.domain.user.service
 
 import com.tianea.fimo.domain.follow.service.FollowService
-import com.tianea.fimo.domain.post.repository.PostRepository
+import com.tianea.fimo.domain.post.service.PostService
+import com.tianea.fimo.domain.report.service.ReportService
 import com.tianea.fimo.domain.user.dto.MyProfileReadDTO
 import com.tianea.fimo.domain.user.dto.ProfileReadDTO
 import com.tianea.fimo.domain.user.dto.ProfileUpdateDTO
@@ -14,8 +15,9 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class UserService(
     private val userRepository: UserRepository,
-    private val postRepository: PostRepository,
-    private val followService: FollowService
+    private val postService: PostService,
+    private val followService: FollowService,
+    private val reportService: ReportService,
 ) {
     @Transactional(readOnly = true)
     fun validateNickname(nickname: String) = !userRepository.existsByNickname(nickname)
@@ -27,20 +29,34 @@ class UserService(
     fun updateProfile(loginId: String, update: ProfileUpdateDTO): MyProfileReadDTO {
         val user = userRepository.findByIdOrNull(loginId) ?: throw UserNotFoundException()
         user.updateProfile(update.nickname, update.archiveName, update.profileImageUrl)
-        val postCount = postRepository.countByUserId(user.id)
-        return MyProfileReadDTO.from(user = user, postCount = postCount)
+        val count = postService.countPosts(user.id)
+        return MyProfileReadDTO.from(user = user, postCount = count)
     }
 
+    @Transactional(readOnly = true)
     fun getMyProfile(loginId: String): MyProfileReadDTO {
         val user = userRepository.findByIdOrNull(loginId) ?: throw UserNotFoundException()
-        val postCount = postRepository.countByUserId(user.id)
-        return MyProfileReadDTO.from(user = user, postCount = postCount)
+        val count = postService.countPosts(user.id)
+        return MyProfileReadDTO.from(user = user, postCount = count)
     }
 
+    @Transactional(readOnly = true)
     fun getUserProfile(loginId: String, profileUserId: String): ProfileReadDTO {
         val user = userRepository.findByIdOrNull(profileUserId) ?: throw UserNotFoundException()
-        val count = postRepository.countByUserId(user.id)
         val status = followService.getFollowStatus(loginId, profileUserId)
+        val count = postService.countPosts(user.id)
         return ProfileReadDTO.from(user = user, postCount = count, status = status)
+    }
+
+    @Transactional
+    fun signOut(loginId: String) {
+        // 사용자 정보 삭제
+        userRepository.deleteById(loginId)
+        // 사용자 게시글 삭제
+        postService.deleteAll(loginId)
+        // 사용자 팔로우 팔로잉 삭제
+        followService.deleteAll(loginId)
+        // 사용자 신고 삭제
+        reportService.deleteAll(loginId)
     }
 }

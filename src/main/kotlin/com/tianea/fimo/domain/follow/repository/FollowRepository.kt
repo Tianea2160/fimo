@@ -5,9 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface FollowRepository : JpaRepository<Follow, String>{
-    fun existsByFollowerAndFollowee(follower :String, followee:String): Boolean
+interface FollowRepository : JpaRepository<Follow, String> {
+    fun existsByFollowerAndFollowee(follower: String, followee: String): Boolean
     fun deleteByFollowerAndFollowee(follower: String, followee: String)
-    fun findAllByFollowee(followee: String) : List<Follow>
-    fun findAllByFollower(follower:String) : List<Follow>
+    fun findAllByFollowee(followee: String): List<Follow>
+    fun findAllByFollower(follower: String): List<Follow>
+    fun deleteAllByFollowerOrFollowee(follower: String, followee: String)
 }

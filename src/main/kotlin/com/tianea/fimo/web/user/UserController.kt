@@ -4,6 +4,7 @@ import com.tianea.fimo.domain.user.dto.MyProfileReadDTO
 import com.tianea.fimo.domain.user.dto.ProfileReadDTO
 import com.tianea.fimo.domain.user.dto.ProfileUpdateDTO
 import com.tianea.fimo.domain.user.service.UserService
+import com.tianea.fimo.shared.dto.CommonResponse
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
@@ -30,4 +31,10 @@ class UserController(
         @PathVariable("userId") userId: String,
         principal: Principal
     ): ProfileReadDTO = userService.getUserProfile(principal.name, userId)
+
+    @DeleteMapping("/signout")
+    fun signOut(principal: Principal): CommonResponse {
+        userService.signOut(principal.name)
+        return CommonResponse("sign out success", "sign.out.success", 200)
+    }
 }
