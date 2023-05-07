@@ -22,5 +22,5 @@ class FollowReadDTO(
 }
 
 enum class FollowStatus {
-    FOLLOWING, FOLLOWED, MUTUAL
+    FOLLOWING, FOLLOWED, MUTUAL, NONE
 }
