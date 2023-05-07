@@ -29,6 +29,7 @@ class SecurityConfig(
             .authorizeHttpRequests()
             .requestMatchers("/login/**").permitAll()
             .requestMatchers("/test/**").permitAll()
+            .requestMatchers("/api/v1/auth/**").permitAll()
             .requestMatchers("/api/v1/**").hasRole("USER")
             .anyRequest().denyAll()
             .and()

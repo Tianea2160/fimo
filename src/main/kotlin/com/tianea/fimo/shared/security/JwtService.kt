@@ -46,4 +46,5 @@ class JwtService(
     fun saveRefreshToken(username: String, token: String) {
         template.opsForValue().set(username, token, Duration.of(7, ChronoUnit.DAYS))
     }
+    fun getSubjectFromToken(token: String): String = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).body.subject
 }
