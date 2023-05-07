@@ -5,7 +5,6 @@ import com.tianea.fimo.domain.post.repository.PostRepository
 import com.tianea.fimo.domain.user.dto.MyProfileReadDTO
 import com.tianea.fimo.domain.user.dto.ProfileReadDTO
 import com.tianea.fimo.domain.user.dto.ProfileUpdateDTO
-import com.tianea.fimo.domain.user.dto.UserReadDTO
 import com.tianea.fimo.domain.user.error.UserNotFoundException
 import com.tianea.fimo.domain.user.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull

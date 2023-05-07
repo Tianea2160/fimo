@@ -1,6 +1,5 @@
 package com.tianea.fimo.domain.user.dto
 
-import com.tianea.fimo.domain.follow.dto.FollowStatus
 import com.tianea.fimo.domain.user.entity.User
 
 class MyProfileReadDTO (

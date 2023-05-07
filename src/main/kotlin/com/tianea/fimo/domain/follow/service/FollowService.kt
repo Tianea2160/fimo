@@ -1,6 +1,5 @@
 package com.tianea.fimo.domain.follow.service
 
-import com.tianea.fimo.domain.follow.dto.FollowReadDTO
 import com.tianea.fimo.domain.follow.dto.FollowStatus
 import com.tianea.fimo.domain.follow.entity.Follow
 import com.tianea.fimo.domain.follow.repository.FollowRepository
