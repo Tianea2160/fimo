@@ -13,9 +13,15 @@ class User(
     @Column(name = "user_id")
     val id: String,
     @Column(name = "nickname", unique = true)
-    val nickname: String = UUID.randomUUID().toString(),
+    var nickname: String = UUID.randomUUID().toString(),
     @Column(name = "archive_name", unique = true)
-    val archiveName: String = UUID.randomUUID().toString(),
+    var archiveName: String = UUID.randomUUID().toString(),
     @Column(name = "profile_image_url", unique = true)
-    val profileImageUrl: String = UUID.randomUUID().toString(),
-)
+    var profileImageUrl: String = UUID.randomUUID().toString(),
+) {
+    fun updateProfile(nickname: String, archiveName: String, profileImageUrl: String) {
+        this.archiveName = archiveName
+        this.nickname = nickname
+        this.profileImageUrl = profileImageUrl
+    }
+}

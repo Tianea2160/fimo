@@ -2,6 +2,7 @@ package com.tianea.fimo.web.follow
 
 import com.tianea.fimo.domain.follow.dto.FollowReadDTO
 import com.tianea.fimo.domain.follow.service.FollowService
+import com.tianea.fimo.domain.user.dto.ProfileReadDTO
 import com.tianea.fimo.web.post.CommonResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -16,7 +17,7 @@ class FollowController(
     private val followService: FollowService
 ) {
     @GetMapping("/me")
-    fun getMyFollows(principal: Principal): List<FollowReadDTO> = followService.myFollowers(principal.name)
+    fun getMyFollows(principal: Principal): List<ProfileReadDTO> = followService.myFollowers(principal.name)
 
     @PostMapping("/following/{followee}")
     fun follow(principal: Principal, @PathVariable("followee") followee: String): CommonResponse {
