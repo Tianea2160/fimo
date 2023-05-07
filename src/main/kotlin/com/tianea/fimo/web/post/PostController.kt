@@ -4,6 +4,7 @@ import com.tianea.fimo.domain.post.dto.PostCreateDTO
 import com.tianea.fimo.domain.post.dto.PostReadDTO
 import com.tianea.fimo.domain.post.dto.PostUpdateDTO
 import com.tianea.fimo.domain.post.service.PostService
+import com.tianea.fimo.shared.dto.CommonResponse
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
@@ -45,11 +46,9 @@ class PostController(
     fun findByUserId(@PathVariable("userId") userId: String, principal: Principal): List<PostReadDTO> =
         postService.findAllByUserId(loginId = principal.name, userId = userId)
 
+    @PostMapping("/favorite/{postId}")
+    fun favoriteUp(principal: Principal, @PathVariable("postId") postId: String): Long =
+        postService.favoriteUp(principal.name, postId = postId)
 }
 
 
-class CommonResponse(
-    val code: String,
-    val message: String,
-    val status: Int,
-)

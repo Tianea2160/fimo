@@ -1,14 +1,9 @@
 package com.tianea.fimo.web.follow
 
-import com.tianea.fimo.domain.follow.dto.FollowReadDTO
 import com.tianea.fimo.domain.follow.service.FollowService
 import com.tianea.fimo.domain.user.dto.ProfileReadDTO
-import com.tianea.fimo.web.post.CommonResponse
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import com.tianea.fimo.shared.dto.CommonResponse
+import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
 @RestController
