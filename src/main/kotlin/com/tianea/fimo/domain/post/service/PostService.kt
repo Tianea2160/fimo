@@ -10,10 +10,10 @@ import com.tianea.fimo.domain.post.repository.PostItemRepository
 import com.tianea.fimo.domain.post.repository.PostRepository
 import com.tianea.fimo.domain.user.error.UserNotFoundException
 import com.tianea.fimo.domain.user.repository.UserRepository
+import com.tianea.fimo.shared.provider.IdentifierProvider
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.UUID
 
 @Service
 class PostService(
@@ -21,7 +21,7 @@ class PostService(
     private val postRepository: PostRepository,
     private val postItemRepository: PostItemRepository,
     private val postClickRepository: PostClickRepository,
-    private val provider: PostIdentifierProvider
+    private val provider: IdentifierProvider
 ) {
     @Transactional
     fun createPost(loginId: String, create: PostCreateDTO): PostReadDTO {
@@ -75,7 +75,3 @@ class PostService(
     }
 }
 
-@Service
-class PostIdentifierProvider() {
-    fun generateId(): String = UUID.randomUUID().toString()
-}

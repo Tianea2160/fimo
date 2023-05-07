@@ -2,8 +2,7 @@ package com.tianea.fimo.domain.post.dto
 
 import com.tianea.fimo.domain.post.entity.Post
 import com.tianea.fimo.domain.post.entity.PostItem
-import com.tianea.fimo.domain.post.service.PostIdentifierProvider
-import java.time.LocalDateTime
+import com.tianea.fimo.shared.provider.IdentifierProvider
 
 
 class PostCreateDTO(
@@ -13,7 +12,7 @@ class PostCreateDTO(
         return Post(id = id, userId = userId)
     }
 
-    fun createItems(postId: String, provider: PostIdentifierProvider): List<PostItem> =
+    fun createItems(postId: String, provider: IdentifierProvider): List<PostItem> =
         items.map { item -> item.toEntity(provider.generateId(), postId) }
 }
 

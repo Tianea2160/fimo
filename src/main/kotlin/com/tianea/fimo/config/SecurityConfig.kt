@@ -28,7 +28,7 @@ class SecurityConfig(
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .authorizeHttpRequests()
             .requestMatchers("/login/**").permitAll()
-            .requestMatchers("/test/user").hasRole("USER")
+            .requestMatchers("/test/**").permitAll()
             .requestMatchers("/api/v1/**").hasRole("USER")
             .anyRequest().denyAll()
             .and()

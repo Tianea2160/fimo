@@ -15,4 +15,6 @@ class UserReadDTO(
             archiveName = user.archiveName
         )
     }
+
+    override fun toString(): String = "UserReadDTO(id='$id', nickname='$nickname', archiveName='$archiveName')"
 }
