@@ -83,5 +83,15 @@ class PostService(
             val isClicked = postClickRepository.existsByPostIdAndUserId(userId = loginId, postId = post.id)
             PostReadDTO.from(user, post, items, isClicked)
         }
+
+    @Transactional
+    fun favoriteUp(loginId :String, postId: String) : Long{
+        val post = postRepository.findByIdOrNull(postId) ?: throw PostNotFoundException()
+        if(!postClickRepository.existsByPostIdAndUserId(userId = loginId, postId = postId)) {
+            val click = post.createPostClick(userId = loginId)
+            postClickRepository.save(click)
+        }
+        return         post.favoriteUp()
+    }
 }
 

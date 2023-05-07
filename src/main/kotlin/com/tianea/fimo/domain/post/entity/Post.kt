@@ -4,6 +4,7 @@ import com.tianea.fimo.domain.user.entity.User
 import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedDate
 import java.time.LocalDateTime
+import java.util.UUID
 
 @Entity
 @Table(name = "posts")
@@ -17,7 +18,12 @@ class Post(
     @Column(name = "created_at")
     val createdAt : LocalDateTime = LocalDateTime.now()
 ) {
-    fun favoriteUp() = favorite++
+    fun favoriteUp() = ++favorite
+    fun createPostClick(userId :String) : PostClick = PostClick(
+        id = UUID.randomUUID().toString(),
+        userId = userId,
+        postId = id
+    )
 }
 
 @Entity
