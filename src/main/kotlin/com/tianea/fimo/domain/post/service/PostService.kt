@@ -10,10 +10,10 @@ import com.tianea.fimo.domain.post.repository.PostItemRepository
 import com.tianea.fimo.domain.post.repository.PostRepository
 import com.tianea.fimo.domain.user.error.UserNotFoundException
 import com.tianea.fimo.domain.user.repository.UserRepository
+import com.tianea.fimo.shared.provider.IdentifierProvider
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.UUID
 
 @Service
 class PostService(
@@ -21,7 +21,7 @@ class PostService(
     private val postRepository: PostRepository,
     private val postItemRepository: PostItemRepository,
     private val postClickRepository: PostClickRepository,
-    private val provider: PostIdentifierProvider
+    private val provider: IdentifierProvider
 ) {
     @Transactional
     fun createPost(loginId: String, create: PostCreateDTO): PostReadDTO {
@@ -66,16 +66,22 @@ class PostService(
     }
 
     @Transactional(readOnly = true)
-    fun findById(loginId : String, postId :String): PostReadDTO {
+    fun findById(loginId: String, postId: String): PostReadDTO {
         val post = postRepository.findByIdOrNull(postId) ?: throw PostNotFoundException()
         val user = userRepository.findByIdOrNull(post.userId) ?: throw UserNotFoundException()
         val items = postItemRepository.findAllByPostId(post.id)
         val isClicked = postClickRepository.existsByPostIdAndUserId(userId = loginId, postId = post.id)
         return PostReadDTO.from(user, post, items, isClicked)
     }
+
+
+    @Transactional(readOnly = true)
+    fun findAllByUserId(loginId: String, userId: String): List<PostReadDTO> =
+        postRepository.findAllByUserId(userId).map { post ->
+            val items = postItemRepository.findAllByPostId(post.id)
+            val user = userRepository.findByIdOrNull(post.userId) ?: throw UserNotFoundException()
+            val isClicked = postClickRepository.existsByPostIdAndUserId(userId = loginId, postId = post.id)
+            PostReadDTO.from(user, post, items, isClicked)
+        }
 }
 
-@Service
-class PostIdentifierProvider() {
-    fun generateId(): String = UUID.randomUUID().toString()
-}
