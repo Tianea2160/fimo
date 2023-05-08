@@ -1,6 +1,5 @@
 package com.tianea.fimo.domain.follow.service
 
-import com.ninjasquad.springmockk.MockkBean
 import com.tianea.fimo.domain.follow.dto.FollowStatus
 import com.tianea.fimo.domain.follow.entity.Follow
 import com.tianea.fimo.domain.follow.repository.FollowRepository
@@ -11,27 +10,16 @@ import com.tianea.fimo.shared.provider.IdentifierProvider
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
-import io.mockk.impl.annotations.InjectMockKs
-import io.mockk.junit5.MockKExtension
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.boot.test.context.SpringBootTest
+import io.mockk.mockk
 import org.springframework.data.repository.findByIdOrNull
 
-@SpringBootTest
-@ExtendWith(MockKExtension::class)
-class FollowServiceTest(
-    @InjectMockKs
-    private val followService: FollowService,
-    @MockkBean
-    private val followRepository: FollowRepository,
-    @MockkBean
-    private val userRepository: UserRepository,
-    @MockkBean
-    private val postRepository: PostRepository,
-    @MockkBean
-    private val provider: IdentifierProvider
-) : BehaviorSpec({
+class FollowServiceTest : BehaviorSpec({
+    val followRepository: FollowRepository = mockk()
+    val userRepository: UserRepository = mockk()
+    val postRepository: PostRepository = mockk()
+    val provider: IdentifierProvider = mockk()
+    val followService = FollowService(followRepository, userRepository, postRepository, provider)
+
 
     given("사용자가 3명 있을 때 ") {
         val userA = "userA"
