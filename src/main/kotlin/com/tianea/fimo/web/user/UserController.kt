@@ -32,9 +32,4 @@ class UserController(
         principal: Principal
     ): ProfileReadDTO = userService.getUserProfile(principal.name, userId)
 
-    @DeleteMapping("/signout")
-    fun signOut(principal: Principal): CommonResponse {
-        userService.signOut(principal.name)
-        return CommonResponse("sign out success", "sign.out.success", 200)
-    }
 }

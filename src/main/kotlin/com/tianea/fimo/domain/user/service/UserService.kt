@@ -9,7 +9,6 @@ import com.tianea.fimo.domain.user.dto.ProfileUpdateDTO
 import com.tianea.fimo.domain.user.dto.UserCreateDTO
 import com.tianea.fimo.domain.user.error.UserNotFoundException
 import com.tianea.fimo.domain.user.repository.UserRepository
-import com.tianea.fimo.shared.provider.IdentifierProvider
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -20,7 +19,6 @@ class UserService(
     private val postService: PostService,
     private val followService: FollowService,
     private val reportService: ReportService,
-    private val provider: IdentifierProvider
 ) {
     @Transactional
     fun createUser(create:UserCreateDTO){
@@ -61,7 +59,7 @@ class UserService(
     }
 
     @Transactional
-    fun signOut(loginId: String) {
+    fun withdrawal(loginId: String) {
         // 사용자 정보 삭제
         userRepository.deleteById(loginId)
         // 사용자 게시글 삭제

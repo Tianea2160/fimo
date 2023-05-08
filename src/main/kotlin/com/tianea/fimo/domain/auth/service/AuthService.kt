@@ -6,7 +6,6 @@ import com.tianea.fimo.domain.auth.error.JwtValidationException
 import com.tianea.fimo.domain.auth.error.NicknameAlreadyExistException
 import com.tianea.fimo.domain.auth.error.UserAlreadyExistException
 import com.tianea.fimo.domain.user.dto.UserCreateDTO
-import com.tianea.fimo.domain.user.entity.User
 import com.tianea.fimo.domain.user.error.UserNotFoundException
 import com.tianea.fimo.domain.user.service.UserService
 import com.tianea.fimo.shared.security.JwtService
@@ -64,6 +63,10 @@ class AuthService(
             profileImageUrl = signUp.profileImageUrl
         )
         userService.createUser(create)
+    }
+
+    fun withdrawal(loginId: String) {
+        userService.withdrawal(loginId)
     }
 }
 
