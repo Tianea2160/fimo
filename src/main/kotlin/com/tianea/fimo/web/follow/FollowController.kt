@@ -3,9 +3,11 @@ package com.tianea.fimo.web.follow
 import com.tianea.fimo.domain.follow.service.FollowService
 import com.tianea.fimo.domain.user.dto.ProfileReadDTO
 import com.tianea.fimo.shared.dto.CommonResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
+@Tag(name = "Follow", description = "팔로우/언팔로우, 팔로우한 사용자 조회 기능이 있습니다.")
 @RestController
 @RequestMapping("/api/v1/follow")
 class FollowController(

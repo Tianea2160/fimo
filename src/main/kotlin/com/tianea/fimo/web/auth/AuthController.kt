@@ -7,9 +7,11 @@ import com.tianea.fimo.domain.auth.service.ReissueSuccessDTO
 import com.tianea.fimo.domain.auth.service.SignUpDTO
 import com.tianea.fimo.shared.dto.CommonResponse
 import com.tianea.fimo.web.auth.dto.ReissueRequest
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
+@Tag(name = "Auth", description = "로그인/로그아웃, 토큰갱신, 회원가입/회원탈퇴와 같은 기능이 있습니다.")
 @RestController
 @RequestMapping("/api/v1/auth")
 class AuthController(
