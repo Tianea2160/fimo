@@ -37,3 +37,4 @@ out/
 .vscode/
 **/application-*
 docker-compose.yml
+mysql/data/**
