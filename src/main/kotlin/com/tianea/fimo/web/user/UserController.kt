@@ -5,9 +5,11 @@ import com.tianea.fimo.domain.user.dto.ProfileReadDTO
 import com.tianea.fimo.domain.user.dto.ProfileUpdateDTO
 import com.tianea.fimo.domain.user.service.UserService
 import com.tianea.fimo.shared.dto.CommonResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
+@Tag(name = "User", description = "프로필 조회, 프로필 수정, (사용자, 아카이브 이름) 중복 체크 기능이 있습니다.")
 @RestController
 @RequestMapping("/api/v1/user")
 class UserController(

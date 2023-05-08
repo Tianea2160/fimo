@@ -5,10 +5,12 @@ import com.tianea.fimo.domain.post.dto.PostReadDTO
 import com.tianea.fimo.domain.post.dto.PostUpdateDTO
 import com.tianea.fimo.domain.post.service.PostService
 import com.tianea.fimo.shared.dto.CommonResponse
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
 
+@Tag(name = "Post", description = "게시글 생성, 수정, 삭제, 조회(단건, 전체, 특정 사용자) 등의 기능이 있습니다.")
 @RestController
 @RequestMapping("/api/v1/post")
 class PostController(
