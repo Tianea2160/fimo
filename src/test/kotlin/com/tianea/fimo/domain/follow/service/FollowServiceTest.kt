@@ -11,6 +11,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.springframework.data.repository.findByIdOrNull
 
 class FollowServiceTest : BehaviorSpec({
@@ -19,7 +20,6 @@ class FollowServiceTest : BehaviorSpec({
     val postRepository: PostRepository = mockk()
     val provider: IdentifierProvider = mockk()
     val followService = FollowService(followRepository, userRepository, postRepository, provider)
-
 
     given("사용자가 3명 있을 때 ") {
         val userA = "userA"
@@ -47,7 +47,6 @@ class FollowServiceTest : BehaviorSpec({
             nickname = "user_d",
             archiveName = "user_archive_d",
         )
-
         every { postRepository.countByUserId(any()) } returns 0
 
         `when`("어느 한 사용자가 팔로우 목록을 조회하면") {
@@ -68,6 +67,31 @@ class FollowServiceTest : BehaviorSpec({
                 reads.count { it.status == FollowStatus.FOLLOWING } shouldBe 1
                 reads.count { it.status == FollowStatus.FOLLOWED } shouldBe 1
                 reads.count { it.status == FollowStatus.MUTUAL } shouldBe 1
+            }
+        }
+    }
+
+    given("사용자 A, B가 있을 때") {
+        val userA = "userA"
+        val userB = "userB"
+
+        `when`("A, B가 아무 관계가 아닐때, A가 B를 팔로우하면") {
+            every { followRepository.existsByFollowerAndFollowee(userA, userB) } returns false
+            every { userRepository.existsById(userB) } returns true
+            every { followRepository.save(any()) } returns Follow("user_a id", userA, userB)
+            every { provider.generateId() } returns "user_a id"
+
+            followService.follow(userA, userB)
+            then("팔로우가 생성되어야 한다.") {
+                verify(exactly = 1) { followRepository.save(any()) }
+            }
+        }
+
+        `when`("A가 B를 팔로우하고 있는 상태에서 A가 B를 언팔로우하면") {
+            every { followRepository.deleteByFollowerAndFollowee(userA, userB) } returns Unit
+            followService.unfollow(userA, userB)
+            then("팔로우가 삭제되어야 한다.") {
+                verify(exactly = 1) { followRepository.deleteByFollowerAndFollowee(userA, userB) }
             }
         }
     }
