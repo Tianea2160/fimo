@@ -16,6 +16,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.springframework.data.repository.findByIdOrNull
 
 class PostServiceTest : BehaviorSpec({
@@ -108,6 +109,31 @@ class PostServiceTest : BehaviorSpec({
                     read.items[i].imageUrl shouldBe update.items[i].imageUrl
                     read.items[i].content shouldBe update.items[i].content
                 }
+            }
+        }
+    }
+
+    given("게시글을 삭제하고 싶을때") {
+        val user = User(
+            id = "userA",
+            nickname = "user_a",
+            archiveName = "user_archive_a",
+        )
+        val post = Post(
+            id = "test post id2",
+            userId = user.id,
+        )
+        `when`("게시글 삭제 요청을 하면") {
+            every { userRepository.findByIdOrNull(user.id) } returns user
+            every { postRepository.findByIdOrNull(post.id) } returns post
+            every { postItemRepository.deleteAllByPostId(post.id) } returns Unit
+            every { postRepository.deleteById(post.id) } returns Unit
+
+            postService.deletePost(user.id, post.id)
+
+            then("게시글이 삭제되어야한다.") {
+                verify(exactly = 1) { postItemRepository.deleteAllByPostId(post.id) }
+                verify(exactly = 1) { postRepository.deleteById(post.id) }
             }
         }
     }
