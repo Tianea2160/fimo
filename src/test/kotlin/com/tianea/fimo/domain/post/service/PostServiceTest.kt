@@ -2,6 +2,9 @@ package com.tianea.fimo.domain.post.service
 
 import com.tianea.fimo.domain.post.dto.PostCreateDTO
 import com.tianea.fimo.domain.post.dto.PostItemCreateDTO
+import com.tianea.fimo.domain.post.dto.PostItemUpdateDTO
+import com.tianea.fimo.domain.post.dto.PostUpdateDTO
+import com.tianea.fimo.domain.post.entity.Post
 import com.tianea.fimo.domain.post.entity.PostItem
 import com.tianea.fimo.domain.post.repository.PostClickRepository
 import com.tianea.fimo.domain.post.repository.PostItemRepository
@@ -62,6 +65,49 @@ class PostServiceTest : BehaviorSpec({
                 read.items.size shouldBe 1
                 read.items[0].imageUrl shouldBe "test image"
                 read.items[0].content shouldBe "test content"
+            }
+        }
+    }
+
+    given("수정하고 싶은 게시글이 있을 때") {
+        val user = User(
+            id = "userA",
+            nickname = "user_a",
+            archiveName = "user_archive_a",
+        )
+        val postId = "test post id"
+        val update = PostUpdateDTO(
+            items = listOf(
+                PostItemUpdateDTO(
+                    imageUrl = "test image",
+                    content = "test content"
+                )
+            )
+        )
+        `when`("게시글 수정 메서드를 호출하면") {
+            every { userRepository.findByIdOrNull(user.id) } returns user
+            every { postRepository.findByIdOrNull(postId) } returns Post(
+                id = postId,
+                userId = user.id,
+            )
+
+            every { postItemRepository.deleteAllByPostId(postId) } returns Unit
+            every { postItemRepository.saveAll(any<List<PostItem>>()) } answers { firstArg() }
+            every { postClickRepository.existsByPostIdAndUserId(any(), any()) } returns false
+
+            val read = postService.updatePost(user.id, postId, update)
+
+            then("게시글이 수정되어야한다.") {
+                read.id shouldBe postId
+                read.user.id shouldBe user.id
+                read.user.nickname shouldBe user.nickname
+                read.user.archiveName shouldBe user.archiveName
+                read.items.size shouldBe 1
+
+                for (i in 0..update.items.lastIndex) {
+                    read.items[i].imageUrl shouldBe update.items[i].imageUrl
+                    read.items[i].content shouldBe update.items[i].content
+                }
             }
         }
     }
