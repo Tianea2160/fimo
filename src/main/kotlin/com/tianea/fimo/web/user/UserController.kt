@@ -53,7 +53,7 @@ class UserController(
         value = [
             ApiResponse(responseCode = "200", description = "프로필 조회 성공"),
             ApiResponse(
-                responseCode = "404",
+                responseCode = "400",
                 description = "프로필 조회 실패",
                 content = [Content(schema = Schema(implementation = ErrorCode::class))]
             )
