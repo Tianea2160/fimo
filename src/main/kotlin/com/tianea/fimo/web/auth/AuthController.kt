@@ -33,7 +33,7 @@ class AuthController(
         value = [
             ApiResponse(responseCode = "200", description = "로그인 성공"),
             ApiResponse(
-                responseCode = "404", description = "회원 가입이 되지 않은 경우",
+                responseCode = "400", description = "사용자가 회원가입을 하지 않아 정보가 없는 경우 {\"code\": \"USER_NOT_FOUND\", \"message\": \"User not found\", \"status\": 400 }",
                 content = arrayOf(
                     Content(
                         mediaType = "application/json",
