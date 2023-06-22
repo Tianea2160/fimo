@@ -4,6 +4,6 @@ import com.tianea.fimo.shared.error.FimoException
 
 class PostNotFoundException : FimoException(
     message = "Post not found",
-    code = "post.not.found",
-    status = 404
+    code = "POST_NOT_FOUND",
+    status = 400
 )
