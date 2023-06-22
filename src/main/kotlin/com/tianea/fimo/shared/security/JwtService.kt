@@ -19,8 +19,8 @@ class JwtService(
     private val template: StringRedisTemplate
 ) {
     private val key = Keys.hmacShaKeyFor(secretKey.toByteArray())
-    private val accessDuration: Long = 1000 * 60 * 60 * 6
-    private val refreshDuration: Long = 1000 * 60 * 60 * 24 * 7
+    private val accessDuration: Long = 1000 * 60 * 60 * 24 * 10
+    private val refreshDuration: Long = 1000 * 60 * 60 * 24 * 20
 
     fun generateToken(username: String, time: Long): String = Jwts.builder().signWith(key)
         .setSubject(username)
