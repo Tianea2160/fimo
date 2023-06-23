@@ -27,7 +27,7 @@ class SecurityConfig(
             .authorizeHttpRequests()
             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
             .requestMatchers("/api/v1/auth/logout").authenticated()
-            .requestMatchers("/api/v1/auth/**").permitAll()
+            .requestMatchers("/api/v1/auth/**", "/api/v1/user/validate/**").permitAll()
             .requestMatchers("/test/**").permitAll()
             .requestMatchers("/api/v1/auth/**").permitAll()
             .requestMatchers("/api/v1/**").hasRole("USER")
