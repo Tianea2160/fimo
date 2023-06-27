@@ -22,6 +22,13 @@ class FollowService(
     private val provider: IdentifierProvider
 ) {
 
+    fun sortedFollowReadDTOList(follow : List<FollowReadDTO>, sortType: FollowSortType) =
+        when (sortType) {
+            CREATED -> follow.sortedByDescending { it.createdAt }
+            ALPAHABETICAL -> follow.sortedBy { it.nickname }
+        }
+
+
     @Transactional(readOnly = true)
     fun myFollowers(loginId: String, sortType: FollowSortType = CREATED): List<FollowReadDTO> {
         val follower = followRepository.findAllByFollower(loginId).toSet()
@@ -44,10 +51,39 @@ class FollowService(
         }
 
         val result = onlyMe + onlyYou + both
-        return when (sortType) {
-            CREATED -> result.sortedByDescending { it.createdAt }
-            ALPAHABETICAL -> result.sortedBy { it.nickname }
+        return sortedFollowReadDTOList(result, sortType)
+    }
+
+    @Transactional(readOnly = true)
+    fun findFollowers(loginId: String, userId: String, sortType: FollowSortType = CREATED): List<FollowReadDTO> {
+        val follower = followRepository.findAllByFollower(userId).toSet()
+        val followee = followRepository.findAllByFollowee(userId).toSet()
+        val loginUser = userRepository.findByIdOrNull(userId) ?: throw UserNotFoundException()
+
+
+        val onlyMe = (follower - followee).map { follow ->
+            val user = userRepository.findByIdOrNull(follow.followee) ?: throw UserNotFoundException()
+            val postCount = postRepository.countByUserId(user.id)
+            val status = getFollowStatus(loginId, follow.followee)
+            FollowReadDTO.from(user = user, follow, status = status, postCount = postCount)
         }
+        val onlyYou = (followee - follower).map { follow ->
+            val user = userRepository.findByIdOrNull(follow.follower) ?: throw UserNotFoundException()
+            val postCount = postRepository.countByUserId(user.id)
+            val status = getFollowStatus(loginId, follow.followee)
+            FollowReadDTO.from(user = user, follow = follow, status = status, postCount = postCount)
+        }
+
+        val both = follower.intersect(followee).map { follow ->
+            val user = userRepository.findByIdOrNull(follow.followee) ?: throw UserNotFoundException()
+            val postCount = postRepository.countByUserId(user.id)
+            val id = if (follow.follower == userId) follow.followee else follow.follower
+            val status = getFollowStatus(loginId, id)
+            FollowReadDTO.from(user = user, follow = follow, status = status, postCount = postCount)
+        }
+
+        val result = onlyMe + onlyYou + both
+        return sortedFollowReadDTOList(result, sortType)
     }
 
     @Transactional
