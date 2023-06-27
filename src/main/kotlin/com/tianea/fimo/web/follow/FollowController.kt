@@ -4,11 +4,8 @@ import com.tianea.fimo.domain.follow.dto.FollowReadDTO
 import com.tianea.fimo.domain.follow.service.FollowService
 import com.tianea.fimo.domain.follow.service.FollowSortType
 import com.tianea.fimo.domain.follow.service.FollowSortType.*
-import com.tianea.fimo.domain.user.dto.ProfileReadDTO
 import com.tianea.fimo.shared.dto.CommonResponse
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.responses.ApiResponse
-import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
@@ -28,6 +25,17 @@ class FollowController(
         principal: Principal,
         @RequestParam(defaultValue = "ALPAHABETICAL") sortType: FollowSortType = ALPAHABETICAL
     ): List<FollowReadDTO> = followService.myFollowers(principal.name, sortType)
+
+    @Operation(
+        summary = "다른 사람이 팔로우한 사용자를 보여줍니다.",
+        description = "다른 사람이 팔로우한 사용자를 현재 로그인한 사용자를 기준으로 팔로우 상태를 보여줍니다."
+    )
+    @GetMapping("/{userId}")
+    fun getOtherFollows(
+        principal: Principal,
+        @RequestParam(defaultValue = "ALPAHABETICAL") sortType: FollowSortType = ALPAHABETICAL,
+        @PathVariable("userId") userId: String,
+    ) = followService.findFollowers(principal.name, userId, sortType)
 
     @Operation(summary = "팔로우", description = "다른 사람을 팔로우 합니다. 이미 팔로우를 한 경우에는 성공을 반환합니다.")
     @PostMapping("/following/{followee}")
