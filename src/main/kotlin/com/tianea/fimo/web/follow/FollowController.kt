@@ -1,6 +1,9 @@
 package com.tianea.fimo.web.follow
 
+import com.tianea.fimo.domain.follow.dto.FollowReadDTO
 import com.tianea.fimo.domain.follow.service.FollowService
+import com.tianea.fimo.domain.follow.service.FollowSortType
+import com.tianea.fimo.domain.follow.service.FollowSortType.*
 import com.tianea.fimo.domain.user.dto.ProfileReadDTO
 import com.tianea.fimo.shared.dto.CommonResponse
 import io.swagger.v3.oas.annotations.Operation
@@ -21,7 +24,10 @@ class FollowController(
         description = "자신이 팔로우했거나, 내가 팔로우하거나, 서로 팔로우 하는 경우의 사용자를 조회합니다."
     )
     @GetMapping("/me")
-    fun getMyFollows(principal: Principal): List<ProfileReadDTO> = followService.myFollowers(principal.name)
+    fun getMyFollows(
+        principal: Principal,
+        @RequestParam(defaultValue = "ALPAHABETICAL") sortType: FollowSortType = ALPAHABETICAL
+    ): List<FollowReadDTO> = followService.myFollowers(principal.name, sortType)
 
     @Operation(summary = "팔로우", description = "다른 사람을 팔로우 합니다. 이미 팔로우를 한 경우에는 성공을 반환합니다.")
     @PostMapping("/following/{followee}")
