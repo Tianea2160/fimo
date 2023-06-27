@@ -4,9 +4,9 @@ import com.tianea.fimo.domain.follow.dto.FollowReadDTO
 import com.tianea.fimo.domain.follow.dto.FollowStatus
 import com.tianea.fimo.domain.follow.entity.Follow
 import com.tianea.fimo.domain.follow.repository.FollowRepository
-import com.tianea.fimo.domain.follow.service.FollowSortType.*
+import com.tianea.fimo.domain.follow.service.FollowSortType.ALPAHABETICAL
+import com.tianea.fimo.domain.follow.service.FollowSortType.CREATED
 import com.tianea.fimo.domain.post.repository.PostRepository
-import com.tianea.fimo.domain.user.dto.ProfileReadDTO
 import com.tianea.fimo.domain.user.error.UserNotFoundException
 import com.tianea.fimo.domain.user.repository.UserRepository
 import com.tianea.fimo.shared.provider.IdentifierProvider
