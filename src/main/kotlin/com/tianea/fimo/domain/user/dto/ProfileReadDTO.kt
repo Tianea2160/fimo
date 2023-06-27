@@ -1,7 +1,9 @@
 package com.tianea.fimo.domain.user.dto
 
 import com.tianea.fimo.domain.follow.dto.FollowStatus
+import com.tianea.fimo.domain.follow.entity.Follow
 import com.tianea.fimo.domain.user.entity.User
+import java.time.LocalDateTime
 
 class ProfileReadDTO(
     val id: String,
@@ -9,7 +11,7 @@ class ProfileReadDTO(
     val archiveName: String,
     val profileImageUrl: String,
     val postCount: Int,
-    val status: FollowStatus
+    val status: FollowStatus,
 ) {
     companion object {
         fun from(user: User, postCount: Int, status: FollowStatus): ProfileReadDTO {
@@ -19,7 +21,7 @@ class ProfileReadDTO(
                 archiveName = user.archiveName,
                 profileImageUrl = user.profileImageUrl,
                 postCount = postCount,
-                status = status
+                status = status,
             )
         }
     }

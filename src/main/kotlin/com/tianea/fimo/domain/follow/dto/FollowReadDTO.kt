@@ -1,24 +1,31 @@
 package com.tianea.fimo.domain.follow.dto
 
-import com.tianea.fimo.domain.user.dto.UserReadDTO
+import com.tianea.fimo.domain.follow.entity.Follow
 import com.tianea.fimo.domain.user.entity.User
+import java.time.LocalDateTime
 
 class FollowReadDTO(
-    val user: UserReadDTO,
+    val id: String,
+    val nickname: String,
+    val archiveName: String,
+    val profileImageUrl: String,
     val postCount: Int,
-    val status: FollowStatus
+    val status: FollowStatus,
+    val createdAt: LocalDateTime
 ) {
     companion object {
-        fun from(user: User, status: FollowStatus, postCount: Int): FollowReadDTO {
+        fun from(user: User, follow: Follow, postCount: Int, status: FollowStatus): FollowReadDTO {
             return FollowReadDTO(
-                user = UserReadDTO.from(user),
+                id = user.id,
+                nickname = user.nickname,
+                archiveName = user.archiveName,
+                profileImageUrl = user.profileImageUrl,
                 postCount = postCount,
-                status = status
+                status = status,
+                createdAt = follow.createdAt
             )
         }
     }
-
-    override fun toString(): String = "FollowReadDTO(user=$user, postCount=$postCount, status=$status)"
 }
 
 enum class FollowStatus {
